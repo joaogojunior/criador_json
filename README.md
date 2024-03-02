@@ -1,0 +1,1 @@
+Facilita a criação e carga de arquivos de configuração como variaveis dentro de um projeto python.
