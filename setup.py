@@ -1,15 +1,15 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
-    name='json_config',
+    name='criadorjson',
     version='0.1',
-    packages=find_packages(),
+    packages=['criador_json'],
     author='João Guilherme de Oliveira Júnior',
     author_email='joaogojunior@gmail.com',
     description='Facilita a criação e carga de configurações.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/joaogojunior/json_config',
+    url='https://github.com/joaogojunior/criador_json',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',

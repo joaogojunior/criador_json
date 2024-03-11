@@ -1,1 +1,1 @@
-Facilita a criação e carga de arquivos de configuração como variaveis dentro de um projeto python.
+Facilita a criação e carga de arquivos de configuração baseados em j-son como variáveis dentro de um projeto python.
