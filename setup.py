@@ -1,8 +1,9 @@
 from setuptools import setup
+from criador_json import criador_json
 
 setup(
     name='criadorjson',
-    version='0.1',
+    version=criador_json.ver,
     packages=['criador_json'],
     author='João Guilherme de Oliveira Júnior',
     author_email='joaogojunior@gmail.com',
