@@ -1,25 +1,34 @@
 from json import loads, dumps
 from os import path
 
-ver = "0.1.1"
+ver = "0.1.4"
+verbose = False
 
 
 def escreve_json_padrao(arquivo, json_padrao):
+    if isinstance(json_padrao, str):
+        text_out = json_padrao
+    elif isinstance(json_padrao, dict):
+        text_out = dumps(json_padrao, indent=4)
+    else:
+        if verbose:
+            print(f"Nao posso converter o objeto {json_padrao} para str...")
+        raise TypeError
     with (open(arquivo, "w") as config):
         # salva json
-        config.write(json_padrao)
+        config.write(text_out)
 
 
 # carrega valores padroes, cria arquivo de configuração caso nao exista
-def carrega_ou_cria_config(arquivo, valores_padroes):
+def carrega_ou_cria_config(arquivo: str, valores_padroes: dict | str) -> dict:
     if isinstance(valores_padroes, dict):
         # trata como dicionario e format json
         retorno = valores_padroes
-        json_padrao = dumps(valores_padroes, indent=3)
+        json_padrao = dumps(valores_padroes, indent=4)
     else:
         # trata como json e formata json
         retorno = loads(valores_padroes)
-        json_padrao = dumps(retorno, indent=3)
+        json_padrao = dumps(retorno, indent=4)
     # obtem versao do json padrao (se existir)
     try:
         json_padrao_ver = retorno['json_ver']
@@ -30,7 +39,8 @@ def carrega_ou_cria_config(arquivo, valores_padroes):
     # testa se o arquivo de configuração existe
     if not path.isfile(arquivo):
         # se nao existir cria um com os defaults
-        print("Arquivo de configuração %s não encontrado, criando um com padrões..." % arquivo)
+        if verbose:
+            print("Arquivo de configuração %s não encontrado, criando um com padrões..." % arquivo)
         escreve_json_padrao(arquivo, json_padrao)
         return retorno
     else:
@@ -57,8 +67,9 @@ def carrega_ou_cria_config(arquivo, valores_padroes):
             else:
                 # o json padrao e o json do arquivo nao tem versao mostra mensagem avisando e retorna
                 # o json do arquivo
-                print("Ambos os jsons do arquivo e o padrão não possuem versão (chave 'json_ver' ausente)"
-                      " retornando o json do arquivo...")
+                if verbose:
+                    print("Ambos os jsons do arquivo e o padrão não possuem versão (chave 'json_ver' ausente) "
+                          "retornando o json do arquivo...")
                 return dict_arquivo
 
 
@@ -68,13 +79,15 @@ def backup_json(arquivo, json_padrao):
         # rescreve backup antigo se existir
         with open(arquivo + "_backup", "w") as saida:
             saida.write(entrada.read())
-    print("Configuração está sendo atualizada, a configuração antiga foi salva como %s." % arquivo + "_backup")
+    if verbose:
+        print("Configuração está sendo atualizada, a configuração antiga foi salva como %s." % arquivo + "_backup")
     escreve_json_padrao(arquivo, json_padrao)
 
 
 def carrega_config(arquivo):
     # carrega o arquivo de configuracao
-    print("Carregando configurações de", arquivo + "...")
+    if verbose:
+        print("Carregando configurações de", arquivo + "...")
     with open(arquivo, "r") as config:
         retorno = loads(config.read().strip())
         try:
